@@ -16,9 +16,11 @@
         # 'security/ir.model.access.csv',
         'views/views.xml',
         'views/templates.xml',
+        'views/order_confirmation.xml',
     ],
     'assets': {
         'web.assets_frontend': [
+            # 'jubba_website_extend/static/js/jquery.min.js',
             'jubba_website_extend/static/js/order-info.js',
         ]
     }

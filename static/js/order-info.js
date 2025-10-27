@@ -1,27 +1,41 @@
 $(document).ready(function () {
-    // Select all radio buttons with the name 'delivery_method'
+
+    let data;
+    let delivery_amount = 0;
+    let subtotal_amount = 0;
+
+    function render_order() {
+
+        subtotal_amount = data.product_total + delivery_amount;
+
+        $('#delivery_amount').text(`${delivery_amount} ৳`);
+        $('#subtotal_amount').text(`${subtotal_amount} ৳`);
+        $('#taxes_amount').text('0.0 ৳');
+        $('#total_amount').text(`${subtotal_amount} ৳`);
+    }
+
     $('input[name="delivery_method"]').on('click', function () {
-
-        // 'this' refers to the radio button that was just clicked
-        var selectedDeliveryId = $(this).attr('id');
         var selectedDeliveryPrice = $(this).attr('data_price');
-        var deliveryAreaText = $(this).siblings('label').text().trim().split('\n')[0].trim(); // Extract the 'Inside Dhaka' or 'Outside Dhaka' text
-
-        // Log the details to the console (you can replace this with your actual logic)
-        console.log('--- Delivery Method Clicked ---');
-        console.log('ID:', selectedDeliveryId);
-        console.log('Delivery Area:', deliveryAreaText);
-        console.log('Price (as string from data_price attribute):', selectedDeliveryPrice);
-
-        // Example: Convert the price to a number (float)
-        var numericPrice = parseFloat(selectedDeliveryPrice);
-        console.log('Price (as number):', numericPrice);
-
-        // --- Your custom logic goes here ---
-        // For example, you might want to:
-        // 1. Update a "Total Cost" field on the page
-        // 2. Make an AJAX call to update the cart/order details
-        // ------------------------------------
-
+        delivery_amount = parseFloat(selectedDeliveryPrice);
+        render_order();
     });
+
+    function onload() {
+
+        let json_data = $('#json_data').val();
+        data = JSON.parse(json_data);
+        console.log('data', data);
+
+        var selectedDeliveryInput = $('input[name="delivery_method"]:checked');
+
+        if (selectedDeliveryInput.length) {
+            var selectedDeliveryPrice = selectedDeliveryInput.attr('data_price');
+            delivery_amount = parseFloat(selectedDeliveryPrice);
+            render_order();
+        }
+
+    }
+
+    onload();
+
 });
