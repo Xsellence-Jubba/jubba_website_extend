@@ -2,6 +2,7 @@
 import json
 from odoo import http
 from odoo.http import request as req
+from werkzeug.utils import redirect
 
 
 def get_partner():
@@ -37,3 +38,16 @@ class Test(http.Controller):
                 'name': product.name,
             })
         return 't777'
+
+    @http.route('/t8', auth='public', website=True)
+    def t8(self, **kw):
+        order = req.env['sale.order'].sudo().search([('id', '=', 18)])
+        # print('order', order.order_line)
+        pt = get_partner()
+        payment_url= req.env['sslcommerz.transaction'].sudo().create_sslcommerz_payment(order, pt)
+        print('payment_url', payment_url)
+
+        if payment_url:
+            return redirect(payment_url)
+
+        return 't8'
