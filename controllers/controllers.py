@@ -138,7 +138,7 @@ class WebsiteExtend(http.Controller):
             order = req.env['sale.order'].sudo().search([('id', '=', last_order_id)])
 
         if not order or not last_order_id:
-            req.redirect('/')
+            return req.redirect('/')
 
         related_invoices = req.env['account.move'].sudo().search([
             ('move_type', '=', 'out_invoice'),  # Filter for Customer Invoices
