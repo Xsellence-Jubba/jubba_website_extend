@@ -47,11 +47,12 @@ class Test(http.Controller):
         if not order:
             return 'order not found'
 
-        pt = get_partner()
-        payment_url= req.env['sslcommerz.transaction'].sudo().create_sslcommerz_payment(order, pt)
+        print('partner_id', order.partner_id)
+
+        payment_url= req.env['sslcommerz.transaction'].sudo().create_sslcommerz_payment(order, order.partner_id)
         print('payment_url', payment_url)
 
-        if payment_url:
-            return redirect(payment_url)
+        # if payment_url:
+        #     return redirect(payment_url)
 
         return 't8'

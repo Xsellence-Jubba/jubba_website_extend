@@ -2,6 +2,7 @@
 import json
 from odoo import http
 from odoo.http import request as req
+from werkzeug.utils import redirect
 
 
 def get_partner():
@@ -37,18 +38,24 @@ class WebsiteExtend(http.Controller):
                     data['product_total'] += l.price_subtotal
 
         json_data = json.dumps(data)
+        payment_methods = req.env['payment.method'].sudo().search([])
 
         return req.render('jubba_website_extend.shop_customer_info', {
             'delivery_methods': delivery_methods,
             'currency_id': currency_id,
             'json_data': json_data,
             'pt': pt,
+            'payment_methods': payment_methods,
         })
 
     @http.route('/order/information/process', auth='public', website=True)
     def order_info_process(self, **kw):
         pt = get_partner()
         website = req.website
+        payment_method = kw.get('payment_method')
+
+        if not payment_method:
+            return 'payment_method not specified'
 
         # Create contact
         contact_values = {
@@ -68,7 +75,7 @@ class WebsiteExtend(http.Controller):
             order.partner_id = pt.id
         elif order and new_contact:
             order.partner_id = new_contact.id
-    
+
         if website:
             order.website_id = website.id
 
@@ -101,24 +108,51 @@ class WebsiteExtend(http.Controller):
             req.session.pop('website_sale_current_pl', None)
             req.session.pop('website_sale_cart_quantity', None)
             req.session.pop('sale_order_id', None)
+            print('Session cleared')
 
         if order and delivery and product_template:
-            return req.redirect(f'/order/confirmation?order={order.id}')
+            order.action_confirm()
+            req.session['last_order_id'] = order.id
+
+            if payment_method == 'COD':
+                return req.redirect(f'/order/confirmation')
+            elif payment_method == 'SSLCOMMERZ':
+                payment_url = req.env['sslcommerz.transaction'].sudo().create_sslcommerz_payment(order,
+                                                                                                 order.partner_id)
+                # print('payment_url', payment_url)
+                if payment_url:
+                    return redirect(payment_url)
+                else:
+                    return req.redirect('/')
+
+            return req.redirect(f'/')
         else:
             return req.redirect(f'/')
 
     @http.route('/order/confirmation', auth='public', website=True)
     def order_confirmation(self, **kw):
         pt = get_partner()
-        oid = kw.get('order')
+        last_order_id = req.session.get('last_order_id')
         order = None
-        if oid:
-            order = req.env['sale.order'].sudo().search([('id', '=', oid)])
+        if last_order_id:
+            order = req.env['sale.order'].sudo().search([('id', '=', last_order_id)])
 
-        if not order:
+        if not order or not last_order_id:
             req.redirect('/')
+
+        related_invoices = req.env['account.move'].sudo().search([
+            ('move_type', '=', 'out_invoice'),  # Filter for Customer Invoices
+            ('invoice_origin', '=', order.name)  # Link by SO reference (e.g., 'S0001')
+        ])
+
+        print('related_invoices', related_invoices)
+        for invoice in related_invoices:
+            print('payment_state', invoice.payment_state)
+
+        # req.session.pop('last_order_id', None)
 
         return req.render('jubba_website_extend.order_confirmation', {
             'order': order,
             'pt': pt,
+            'related_invoices': related_invoices,
         })
