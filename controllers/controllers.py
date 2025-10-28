@@ -137,8 +137,10 @@ class WebsiteExtend(http.Controller):
         if last_order_id:
             order = req.env['sale.order'].sudo().search([('id', '=', last_order_id)])
 
-        if not order or not last_order_id:
-            return req.redirect('/')
+        # if not order or not last_order_id:
+            # return req.redirect('/')
+
+        return f'last_order_id:{str(last_order_id)},Order:{order.name if order else 'No Order'}'
 
         related_invoices = req.env['account.move'].sudo().search([
             ('move_type', '=', 'out_invoice'),  # Filter for Customer Invoices
@@ -150,7 +152,6 @@ class WebsiteExtend(http.Controller):
             print('payment_state', invoice.payment_state)
 
         req.session.pop('last_order_id', None)
-
         print('order', order)
 
         return req.render('jubba_website_extend.order_confirmation', {
