@@ -41,8 +41,12 @@ class Test(http.Controller):
 
     @http.route('/t8', auth='public', website=True)
     def t8(self, **kw):
-        order = req.env['sale.order'].sudo().search([('id', '=', 18)])
-        # print('order', order.order_line)
+        _id = kw.get('id')
+        order = req.env['sale.order'].sudo().search([('id', '=', int(_id))])
+
+        if not order:
+            return 'order not found'
+
         pt = get_partner()
         payment_url= req.env['sslcommerz.transaction'].sudo().create_sslcommerz_payment(order, pt)
         print('payment_url', payment_url)
