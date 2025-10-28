@@ -129,7 +129,7 @@ class WebsiteExtend(http.Controller):
         else:
             return req.redirect(f'/')
 
-    @http.route('/order/confirmation', type='http', auth='public', csrf=False, save_session=False, website=True)
+    @http.route('/order/confirmation', type='http', auth='public', csrf=False, website=True)
     def order_confirmation(self, **kw):
         pt = get_partner()
         last_order_id = req.session.get('last_order_id')
