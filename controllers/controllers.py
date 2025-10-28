@@ -129,7 +129,11 @@ class WebsiteExtend(http.Controller):
         else:
             return req.redirect(f'/')
 
-    @http.route('/order/confirmation', type='http', auth='public', csrf=False, website=True)
+    @http.route('/order/confirmation/preprocess', type='http', auth='public', csrf=False, save_session=False, website=True)
+    def order_confirmation_preprocess(self, **kw):
+        return req.redirect(f'/order/confirmation')
+
+    @http.route('/order/confirmation', type='http', auth='public', website=True)
     def order_confirmation(self, **kw):
         pt = get_partner()
         last_order_id = req.session.get('last_order_id')
@@ -162,6 +166,10 @@ class WebsiteExtend(http.Controller):
 
     @http.route('/t99', type='http', auth='public', csrf=False, save_session=False, website=True)
     def t99(self, **kw):
-        return req.render('jubba_website_extend.confirmation', {
-            'delivery_methods': 'delivery_methods',
-        })
+        # return req.render('jubba_website_extend.confirmation', {
+        #     'delivery_methods': 'delivery_methods',
+        # })
+        tr = req.env['sslcommerz.transaction'].sudo().search([], order='id DESC', limit=1)
+        print('tr', tr)
+
+        return 't99'
