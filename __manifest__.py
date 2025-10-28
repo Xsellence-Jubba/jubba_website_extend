@@ -5,8 +5,8 @@
         Jubba Website Extend""",
 
     'description': """
-        Jubba Website Extend
-    """,
+                           Jubba Website Extend
+                       """,
     'author': "Abdur Razzak",
     'website': "https://www.xsellencebdltd.com/",
     'category': 'Uncategorized',
@@ -17,6 +17,7 @@
         'views/views.xml',
         'views/templates.xml',
         'views/order_confirmation.xml',
+        'views/confirmation.xml',
     ],
     'assets': {
         'web.assets_frontend': [

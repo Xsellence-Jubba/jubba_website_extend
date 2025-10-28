@@ -129,8 +129,9 @@ class WebsiteExtend(http.Controller):
         else:
             return req.redirect(f'/')
 
-    @http.route('/order/confirmation', type='http', auth='none', csrf=False, save_session=False, website=True)
+    @http.route('/order/confirmation', type='http', auth='public', csrf=False, save_session=False, website=True)
     def order_confirmation(self, **kw):
+        pt = get_partner()
         last_order_id = req.session.get('last_order_id')
         order = None
         if last_order_id:
@@ -139,18 +140,27 @@ class WebsiteExtend(http.Controller):
         if not order or not last_order_id:
             return req.redirect('/')
 
-        # related_invoices = req.env['account.move'].sudo().search([
-        #     ('move_type', '=', 'out_invoice'),  # Filter for Customer Invoices
-        #     ('invoice_origin', '=', order.name)  # Link by SO reference (e.g., 'S0001')
-        # ])
-        #
-        # print('related_invoices', related_invoices)
-        # for invoice in related_invoices:
-        #     print('payment_state', invoice.payment_state)
+        related_invoices = req.env['account.move'].sudo().search([
+            ('move_type', '=', 'out_invoice'),  # Filter for Customer Invoices
+            ('invoice_origin', '=', order.name)  # Link by SO reference (e.g., 'S0001')
+        ])
 
-        # req.session.pop('last_order_id', None)
+        print('related_invoices', related_invoices)
+        for invoice in related_invoices:
+            print('payment_state', invoice.payment_state)
+
+        req.session.pop('last_order_id', None)
+
+        print('order', order)
 
         return req.render('jubba_website_extend.order_confirmation', {
             'order': order,
-            # 'related_invoices': related_invoices,
+            'pt': pt,
+            'related_invoices': related_invoices,
+        })
+
+    @http.route('/t99', type='http', auth='public', csrf=False, save_session=False, website=True)
+    def t99(self, **kw):
+        return req.render('jubba_website_extend.confirmation', {
+            'delivery_methods': 'delivery_methods',
         })

@@ -11,7 +11,7 @@
                         <h4>Thanks for your order</h4>
                         <p>Order ID: <t t-esc="order.name"/></p>
 
-                        <!--<t t-if="related_invoices">
+                        <t t-if="related_invoices">
                             <t t-foreach="related_invoices" t-as="inv">
                                 <div>Payment Status: <span t-esc="inv.payment_state"
                                                            class="badge rounded-pill text-bg-info text-uppercase"></span></div>
@@ -20,7 +20,7 @@
 
                         <t t-if="not related_invoices">
                             <div>Payment Status: <span class="badge rounded-pill text-bg-info text-uppercase">Not Paid</span></div>
-                        </t>-->
+                        </t>
 
                         <br/>
                         <p t-if="not pt">Create <a href="/web/signup">Account</a> To Track Your Order</p>

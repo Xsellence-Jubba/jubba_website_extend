@@ -1,0 +1,8 @@
+<odoo>
+    <template id="confirmation">
+        <t t-call="website.layout">
+            <t t-set="additional_title" t-value="'Order Confirmation'"/>
+            <h1>Hello</h1>
+        </t>
+    </template>
+</odoo>
