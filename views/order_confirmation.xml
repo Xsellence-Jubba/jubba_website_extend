@@ -1,0 +1,37 @@
+<odoo>
+    <template id="order_confirmation">
+        <t t-call="website.layout">
+            <t t-set="additional_title" t-value="'Order Confirmation'"/>
+            <!--<div id="wrap" class="oe_structure oe_empty"/>-->
+
+            <div class="contained my-5">
+                <div class="row">
+                    <div class="col-12 col-lg-4"></div>
+                    <div class="col-12 col-lg-4">
+                        <h4>Thanks for your order</h4>
+                        <p>Order ID: <t t-esc="order.name"/></p>
+
+                        <t t-if="related_invoices">
+                            <t t-foreach="related_invoices" t-as="inv">
+                                <div>Payment Status: <span t-esc="inv.payment_state"
+                                                           class="badge rounded-pill text-bg-info text-uppercase"></span></div>
+                            </t>
+                        </t>
+
+                        <t t-if="not related_invoices">
+                            <div>Payment Status: <span class="badge rounded-pill text-bg-info text-uppercase">Not Paid</span></div>
+                        </t>
+
+                        <br/>
+                        <p t-if="not pt">Create <a href="/web/signup">Account</a> To Track Your Order</p>
+                        <a href="/" class="btn btn-outline-primary px-5">Go To Home</a>
+                        <a t-if="pt" href="/my" class="btn btn-outline-success px-5">Dashboard</a>
+                    </div>
+                    <div class="col-12 col-lg-4"></div>
+                </div>
+            </div>
+
+        </t>
+
+    </template>
+</odoo>

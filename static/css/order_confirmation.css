@@ -1,0 +1,105 @@
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background-color: #f4f7f6; /* Light, gentle background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.confirmation-container {
+    background-color: #ffffff; /* White card background */
+    padding: 40px 60px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    text-align: center;
+    max-width: 500px;
+    width: 90%;
+}
+
+/* Success Checkmark Styling */
+.success-icon {
+    font-size: 48px;
+    color: #4CAF50; /* A classic success green */
+    border: 3px solid #4CAF50;
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    line-height: 70px;
+    margin: 0 auto 20px;
+    font-weight: bold;
+}
+
+h1 {
+    color: #333;
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.message {
+    color: #666;
+    font-size: 16px;
+    margin-bottom: 30px;
+}
+
+/* Order Details Box */
+.order-details {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    border-left: 5px solid #007bff; /* A nice blue accent line */
+}
+
+.order-details h2 {
+    color: #333;
+    font-size: 18px;
+    margin-top: 0;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    font-size: 15px;
+    color: #555;
+}
+
+.highlight {
+    font-weight: bold;
+    color: #333;
+}
+
+/* Button Styling */
+.continue-button {
+    display: block;
+    width: 100%;
+    padding: 12px 0;
+    background-color: #007bff; /* Primary action color */
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 18px;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+
+.continue-button:hover {
+    background-color: #0056b3;
+}
+
+.footer-note {
+    font-size: 14px;
+    color: #999;
+    margin-top: 20px;
+}
+
+.footer-note a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 500;
+}
