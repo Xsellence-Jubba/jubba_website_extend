@@ -131,7 +131,6 @@ class WebsiteExtend(http.Controller):
                 else:
                     return req.redirect('/')
 
-            # Amarpay
             elif payment_method == 'AMARPAY':
                 return req.redirect(f'/pay/amarpay?order_id={order.id}')
 
