@@ -56,6 +56,8 @@ class WebsiteExtend(http.Controller):
         pt = get_partner()
         website = req.website
         payment_method = kw.get('payment_method')
+        mobile = kw.get('mobile')
+        street = kw.get('street')
 
         # req.session['alert_danger'] = 'Mobile number not valid'
         # return req.redirect('/order/information')
@@ -89,6 +91,10 @@ class WebsiteExtend(http.Controller):
             order.partner_id = new_contact.id
         else:
             return 'new_contact not found (/order/information/process)'
+
+        # Update contact
+        order.partner_id.mobile = mobile
+        order.partner_id.street = street
 
         if website:
             order.website_id = website.id
