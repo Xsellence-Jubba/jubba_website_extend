@@ -77,6 +77,9 @@ class WebsiteExtend(http.Controller):
         if sale_order_id:
             order = req.env['sale.order'].sudo().search([('id', '=', sale_order_id)])
 
+        if not order:
+            return 'order not found (/order/information/process)'
+
         if pt:
             order.partner_id = pt.id
         elif order and new_contact:
