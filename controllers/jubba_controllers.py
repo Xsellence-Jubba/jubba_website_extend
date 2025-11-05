@@ -71,6 +71,9 @@ class WebsiteExtend(http.Controller):
         }
         new_contact = req.env['res.partner'].sudo().create(contact_values)
 
+        if not new_contact:
+            return 'new_contact not created'
+
         # Order
         sale_order_id = req.session.get('sale_order_id')
         order = None
@@ -82,8 +85,10 @@ class WebsiteExtend(http.Controller):
 
         if pt:
             order.partner_id = pt.id
-        elif order and new_contact:
+        elif new_contact:
             order.partner_id = new_contact.id
+        else:
+            return 'new_contact not found (/order/information/process)'
 
         if website:
             order.website_id = website.id
